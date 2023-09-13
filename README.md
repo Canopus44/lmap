@@ -9,8 +9,8 @@ Bienvenido a las instrucciones de instalación para tu entorno LAMP con MongoDB.
 Primero, clona este repositorio en tu máquina local:
 
 ```bash
-git clone https://github.com/Canopus44/LAMP-MongoDB-Dev-Environment.git
-cd LAMP-MongoDB-Dev-Environment
+git clone https://github.com/Canopus44/lmap
+cd lmap
 ```
 
 ### 2. Estructura de Directorios
