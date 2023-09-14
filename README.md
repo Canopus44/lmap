@@ -24,11 +24,10 @@ Asegúrate de tener la siguiente estructura de directorios:
 │   ├── php
 │   ├── ssl
 │   └── vhosts
-├── data
-│   └── mongo
 ├── logs
 │   ├── apache2
-│   └── xdebug
+│   ├── xdebug
+|   └── mongo
 └── www
     └── html
 ```
@@ -36,7 +35,7 @@ Asegúrate de tener la siguiente estructura de directorios:
 Puedes crear esta estructura utilizando el siguiente comando:
 
 ```bash
-mkdir -p bin/php config/php config/ssl config/vhosts data/mongo logs/apache2 logs/xdebug www/html
+mkdir -p bin/php config/php config/ssl config/vhosts logs/mongo logs/apache2 logs/xdebug www/html
 ```
 
 ### 3. Configura el Archivo .env
@@ -45,10 +44,10 @@ Edita el archivo `.env` y personaliza las variables según tus preferencias:
 
 ```env
 # Configuración del proyecto LAMP con MongoDB
-COMPOSE_PROJECT_NAME=lamp
+COMPOSE_PROJECT_NAME=lmap
 
 # PHP
-PHPVERSION=php8
+PHPVERSION=php81
 
 # Directorio de la aplicación PHP
 DOCUMENT_ROOT=./www
@@ -65,15 +64,23 @@ XDEBUG_LOG_DIR=./logs/xdebug
 XDEBUG_PORT=9003
 
 # MongoDB
-MONGO_INITDB_ROOT_USERNAME=admin
-MONGO_INITDB_ROOT_PASSWORD=mongo_password
-MONGO_INITDB_DATABASE=mongo_db_name
+MONGO_USERNAME=root
+MONGO_PASSWORD=example
 
 # Puerto de MongoDB
-HOST_MACHINE_MONGO_PORT=27017
+MONGO_PORT=27017
+
+# Puerto de Mongo-Express
+MONGO_EXPRESS_PORT=8081
 
 # Redis
 HOST_MACHINE_REDIS_PORT=6379
+
+# Si ya tienes ocupado el puerto 80, debes cambiar este parametro
+HOST_MACHINE_UNSECURE_HOST_PORT=80
+
+# Si ya tienes ocupado el puerto 443, debes cambiar este parametro
+HOST_MACHINE_SECURE_HOST_PORT=443
 ```
 
 ### 4. Inicia el Entorno
@@ -94,15 +101,15 @@ docker-compose up -d
 
 ## Xdebug
 
-Xdebug comes installed by default and it's version depends on the PHP version chosen in the `".env"` file.
+Xdebug viene instalado por defecto y su versión depende de la versión de PHP elegida en el archivo `".env"` .
 
-**Xdebug versions:**
+**Versiones de Xdebug:**
 
 PHP <= 7.3: Xdebug 2.X.X
 
 PHP >= 7.4: Xdebug 3.X.X
 
-To use Xdebug you need to enable the settings in the `./config/php/php.ini` file according to the chosen version PHP.
+Para usar Xdebug necesitas habilitar las configuraciones en el archivo `./config/php/php.ini` según la versión de PHP elegida.
 
 Example:
 
@@ -122,11 +129,11 @@ Example:
 #xdebug.idekey=VSCODE
 ```
 
-Xdebug VS Code: you have to install the Xdebug extension "PHP Debug". After installed, go to Debug and create the launch file so that your IDE can listen and work properly.
+Xdebug en VS Code: debes instalar la extensión "PHP Debug" de Xdebug. Después de instalarla, ve a Debug y crea el archivo de inicio para que tu IDE pueda escuchar y funcionar correctamente.
 
 Example:
 
-**VERY IMPORTANT:** the `pathMappings` depends on how you have opened the folder in VS Code. Each folder has your own configurations launch, that you can view in `.vscode/launch.json`
+**MUY IMPORTANTE:** los `pathMappings` dependen de cómo has abierto la carpeta en VS Code. Cada carpeta tiene su propia configuración de inicio, que puedes ver en  `.vscode/launch.json`
 
 ```json
 {
@@ -139,16 +146,16 @@ Example:
       // "port": 9000, // Xdebug 2
       "port": 9003, // Xdebug 3
       "pathMappings": {
-        // "/var/www/html": "${workspaceFolder}/www" // if you have opened VSCODE in root folder
-        "/var/www/html": "${workspaceFolder}" // if you have opened VSCODE in ./www folder
+        // "/var/www/html": "${workspaceFolder}/www" /// si has abierto VSCODE en la carpeta raíz
+        "/var/www/html": "${workspaceFolder}" // si has abierto VSCODE en la carpeta ./www
       }
     }
   ]
 }
 ```
 
-Now, make a breakpoint and run debug.
+Ahora, crea un punto de interrupción y ejecuta la depuración.
 
-**Tip!** After theses configurations, you may need to restart container.
+**Tip!** Después de estas configuraciones, es posible que necesites reiniciar el contenedor.
 
 ¡Disfruta desarrollando en tu entorno LAMP con MongoDB! 🎉
